@@ -1,17 +1,45 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+const inputBox = document.getElementById("input-box");
+const listContainer = document.getElementById("list-container");
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+function addTask() {
+    if (inputBox.value === '') 
+    {
+        alert("There is no task....... add to remember 😅")
+    } 
+    else 
+    {
+        let li = document.createElement("li");
+        li.innerHTML = inputBox.value;
+        listContainer.appendChild(li);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+        let span = document.createElement("span");
+        span.innerHTML = "\u00d7";
+        li.appendChild(span);
+
+    }
+    inputBox.value = "";
+    saveData();
+}
+
+listContainer.addEventListener("click",function(e){
+
+    if(e.target.tagName === "LI"){
+        e.target.classList.toggle("checked");
+        saveData();
+    }
+
+    else if (e.target.tagName === "SPAN") {
+        e.target.parentElement.remove();
+        saveData();
+    }
+}, false);
+
+function saveData() {
+    localStorage.setItem("data", listContainer.innerHTML);
+}
+
+function showTask() {
+    listContainer.innerHTML = localStorage.getItem("data");
+}
+
+showTask();
